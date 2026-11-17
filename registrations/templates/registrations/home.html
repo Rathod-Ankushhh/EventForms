@@ -1,0 +1,139 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}EventForms | Upcoming Events{% endblock %}
+
+{% block content %}
+
+<!-- Hero section -->
+<section class="hero">
+    <div class="hero-container">
+
+        <div class="hero-content">
+            <p class="eyebrow">Upcoming Events</p>
+            <h1>Find the event worth showing up for.</h1>
+
+            <p class="hero-description">
+                Discover workshops, conferences and experiences
+                that bring people together and help you grow.
+            </p>
+        </div>
+
+        <div class="hero-search">
+            <form method="GET" class="search-form">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Search events by name or venue..."
+                    value="{{ request.GET.q|default:'' }}"
+                >
+                <button type="submit">Search <span>→</span></button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<!-- Events section -->
+<section class="events-section" id="events">
+    <div class="events-container">
+
+        <div class="section-heading">
+            <p class="eyebrow">Explore What's Happening</p>
+            <h2>Upcoming Events</h2>
+        </div>
+
+        <div class="events-grid">
+
+            {% for event in events %}
+                <div class="event-card">
+
+                    <div class="event-date">
+                        <span class="event-day">{{ event.date|date:"d" }}</span>
+
+                        <div class="event-month-year">
+                            <span>{{ event.date|date:"M" }}</span>
+                            <span>{{ event.date|date:"Y" }}</span>
+                        </div>
+                    </div>
+
+                    <h2 class="event-title">{{ event.name }}</h2>
+
+                    <p class="event-description">
+                        {{ event.description|truncatewords:20 }}
+                    </p>
+
+                    <div class="event-info">
+                        <div>
+                            <span>Venue</span>
+                            <strong>{{ event.venue }}</strong>
+                        </div>
+
+                        <div>
+                            <span>Available Seats</span>
+                            <strong>
+                                {% if event.available_seats > 0 %}
+                                    {{ event.available_seats }}
+                                {% else %}
+                                    Sold Out
+                                {% endif %}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="event-actions">
+                        <a href="{% url 'event_detail' event.id %}" class="view-btn">
+                            View Details
+                        </a>
+
+                        {% if event.available_seats > 0 %}
+                            <a href="{% url 'register_event' event.id %}" class="register-btn">
+                                Register Now →
+                            </a>
+                        {% else %}
+                            <button class="register-btn sold-out-btn" disabled>
+                                Sold Out
+                            </button>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            {% empty %}
+                <p>
+                    {% if request.GET.q %}
+                        No events found. Try another search.
+                    {% else %}
+                        No upcoming events available.
+                    {% endif %}
+                </p>
+            {% endfor %}
+
+        </div>
+
+        {% if events.has_other_pages %}
+            <div class="pagination">
+
+                {% if events.has_previous %}
+                    <a href="?page={{ events.previous_page_number }}&q={{ request.GET.q|urlencode }}">
+                        Previous
+                    </a>
+                {% endif %}
+
+                <span>
+                    Page {{ events.number }} of {{ events.paginator.num_pages }}
+                </span>
+
+                {% if events.has_next %}
+                    <a href="?page={{ events.next_page_number }}&q={{ request.GET.q|urlencode }}">
+                        Next
+                    </a>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

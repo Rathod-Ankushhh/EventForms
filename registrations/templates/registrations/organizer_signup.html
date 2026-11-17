@@ -1,0 +1,38 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}Organizer Signup | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="auth-container">
+    <section class="auth-card">
+
+        <p class="eyebrow">Organizer Portal</p>
+
+        <h1>Create your account.</h1>
+
+        <p class="auth-description">
+            Join EventForms and start managing your events.
+        </p>
+
+        <!-- Organizer signup form -->
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="submit-registration">
+                Create Account →
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account?
+            <a href="{% url 'organizer_login' %}">Login</a>
+        </p>
+
+    </section>
+</main>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}{{ event.name }} | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="details-container">
+
+    <!-- Showing the path back to all events -->
+    <div class="breadcrumb">
+        <a href="/">Events</a>
+        <span>/</span>
+        <span>{{ event.name }}</span>
+    </div>
+
+    <!-- Showing messages if something goes wrong -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="detail-message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="details-layout">
+
+        <!-- Event name and description -->
+        <section class="details-content">
+            <p class="eyebrow">Event Details</p>
+            <h1>{{ event.name }}</h1>
+            <div class="details-description">{{ event.description|linebreaks }}</div>
+        </section>
+
+        <!-- Event information on the side -->
+        <aside class="details-panel">
+            <p class="eyebrow">Event Information</p>
+
+            <!-- Showing the event date -->
+            <div class="details-date">
+                {{ event.date|date:"d" }}
+                <span>{{ event.date|date:"M Y" }}</span>
+            </div>
+
+            <!-- Showing event date, venue and available seats -->
+            <div class="details-info">
+                <div>
+                    <span>Date</span>
+                    <strong>{{ event.date|date:"d M Y" }}</strong>
+                </div>
+
+                <div>
+                    <span>Venue</span>
+                    <strong>{{ event.venue }}</strong>
+                </div>
+
+                <div>
+                    <span>Available Seats</span>
+                    <strong>
+                        {% if event.available_seats > 0 %}
+                            {{ event.available_seats }}
+                        {% else %}
+                            Sold Out
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+
+            <!-- If seats are available, users can register -->
+            {% if event.available_seats > 0 %}
+                <a href="{% url 'register_event' event.id %}" class="details-register">
+                    Register Now →
+                </a>
+            {% else %}
+                <button class="details-soldout" disabled>Sold Out</button>
+            {% endif %}
+
+            <!-- Taking users back to the events page -->
+            <a href="/" class="details-back">← Back to Events</a>
+
+        </aside>
+    </div>
+</main>
+
+{% endblock %}

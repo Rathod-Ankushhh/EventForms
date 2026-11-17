@@ -1,0 +1,74 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}Register for {{ event.name }} | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="registration-container">
+    <div class="registration-layout">
+
+        <!-- Registration form -->
+        <section class="registration-content">
+            <p class="eyebrow">Registration</p>
+            <h1>Reserve your seat.</h1>
+
+            <!-- Showing registration errors -->
+            {% if error %}
+                <div class="registration-error">{{ error }}</div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="registration-error">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="registration-form">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <p class="field-error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="submit-registration">
+                    Complete Registration →
+                </button>
+            </form>
+        </section>
+
+        <!-- Event summary -->
+        <aside class="registration-summary">
+            <p class="eyebrow">Your Event</p>
+            <h2>{{ event.name }}</h2>
+
+            <div class="summary-info">
+                <div>
+                    <span>Date</span>
+                    <strong>{{ event.date|date:"d M Y" }}</strong>
+                </div>
+
+                <div>
+                    <span>Venue</span>
+                    <strong>{{ event.venue }}</strong>
+                </div>
+
+                <div>
+                    <span>Available Seats</span>
+                    <strong>{{ event.available_seats }}</strong>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}Organizer Dashboard | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="dashboard-container">
+
+    {% if messages %}
+        <div class="dashboard-messages">
+            {% for message in messages %}
+                <div class="registration-error">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section class="dashboard-header">
+        <div>
+            <p class="eyebrow">Organizer Portal</p>
+            <h1>Dashboard.</h1>
+            <p class="dashboard-welcome">
+                Welcome back, {{ request.user.username }}.
+            </p>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="{% url 'home' %}" class="dashboard-secondary-btn">
+                Visit Website
+            </a>
+        </div>
+    </section>
+
+    <section class="dashboard-events">
+
+        <div class="dashboard-section-heading">
+            <div>
+                <p class="eyebrow">Event Management</p>
+                <h2>My Events</h2>
+            </div>
+
+            <a href="{% url 'create_event' %}" class="dashboard-create-btn">
+                + Create New Event
+            </a>
+        </div>
+
+        {% for event in events %}
+            <article class="dashboard-event-card">
+
+                <div class="dashboard-event-main">
+                    <h3>{{ event.name }}</h3>
+                    <p>{{ event.date|date:"d M Y" }} · {{ event.venue }}</p>
+
+                    <p>
+                        Total Seats: {{ event.registered_count|add:event.available_seats }}
+                    </p>
+
+                    <p>
+                        Seats Filled: {{ event.registered_count }}
+                    </p>
+
+                    <p>
+                        Seats Available: {{ event.available_seats }}
+                    </p>
+
+                    <a href="{% url 'event_registrations' event.id %}"
+                       class="dashboard-create-btn">
+                        View Registrations →
+                    </a>
+                </div>
+
+                <div class="dashboard-event-status">
+                    <span class="dashboard-status-label">Status</span>
+
+                    {% if event.status == 'approved' %}
+                        <span class="status-approved">Approved</span>
+                    {% elif event.status == 'pending' %}
+                        <span class="status-pending">Pending Approval</span>
+                    {% else %}
+                        <span class="status-rejected">Rejected</span>
+                    {% endif %}
+                </div>
+
+            </article>
+
+        {% empty %}
+            <div class="dashboard-empty">
+                <h3>No events yet.</h3>
+                <p>You haven't created any events. Start by adding your first event.</p>
+                <a href="{% url 'create_event' %}" class="dashboard-create-btn">
+                    Create Your First Event →
+                </a>
+            </div>
+        {% endfor %}
+
+    </section>
+
+</main>
+
+{% endblock %}

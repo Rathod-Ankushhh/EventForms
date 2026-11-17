@@ -1,0 +1,64 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}EventForms{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'registrations/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+    {% block navbar %}
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a class="site-logo" href="/">
+                Event<span>Forms</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#events" class="nav-link">Events</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'organizer_dashboard' %}" class="nav-link">
+                        Dashboard
+                    </a>
+
+                    <form method="POST" action="{% url 'organizer_logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="organizer-link">
+                            Logout
+                        </button>
+                    </form>
+
+                {% else %}
+                    <a href="{% url 'organizer_login' %}" class="nav-link">
+                        Organizer Login
+                    </a>
+
+                    <a href="{% url 'organizer_signup' %}" class="organizer-link">
+                        Become an Organizer →
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block footer %}
+    <footer class="site-footer">
+        <p>© 2026 EventForms. All rights reserved.</p>
+    </footer>
+    {% endblock %}
+
+</body>
+</html>

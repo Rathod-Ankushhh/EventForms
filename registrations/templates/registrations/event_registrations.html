@@ -1,0 +1,84 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}Event Registrations | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="dashboard-container">
+
+    <section class="dashboard-header">
+        <div>
+            <p class="eyebrow">Attendee Management</p>
+            <h1>{{ event.name }}</h1>
+            <p class="dashboard-welcome">
+                {{ event.date|date:"d M Y" }} · {{ event.venue }}
+            </p>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="{% url 'organizer_dashboard' %}"
+               class="dashboard-secondary-btn">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </section>
+
+    <section class="dashboard-events">
+
+        <div class="dashboard-section-heading">
+            <div>
+                <p class="eyebrow">Registration Summary</p>
+                <h2>Seat Details</h2>
+            </div>
+        </div>
+
+        <p>Total Seats: {{ total_seats }}</p>
+        <p>Seats Filled: {{ registered_count }}</p>
+        <p>Seats Available: {{ event.available_seats }}</p>
+
+        <div class="dashboard-section-heading">
+            <div>
+                <p class="eyebrow">Event Participants</p>
+                <h2>Registered Attendees</h2>
+            </div>
+        </div>
+
+        {% if registrations %}
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>College</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for attendee in registrations %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ attendee.name }}</td>
+                                <td>{{ attendee.email }}</td>
+                                <td>{{ attendee.phone }}</td>
+                                <td>{{ attendee.college }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="dashboard-empty">
+                <h3>No registrations yet.</h3>
+                <p>Attendees will appear here when they register for this event.</p>
+            </div>
+        {% endif %}
+
+    </section>
+
+</main>
+
+{% endblock %}

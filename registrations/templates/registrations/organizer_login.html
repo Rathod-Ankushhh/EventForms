@@ -1,0 +1,67 @@
+
+{% extends 'registrations/base.html' %}
+
+{% block title %}Organizer Login | EventForms{% endblock %}
+
+{% block content %}
+
+<main class="auth-container">
+    <section class="auth-card">
+
+        <p class="eyebrow">Organizer Portal</p>
+
+        <h1>Welcome back.</h1>
+
+        <p class="auth-description">
+            Log in to manage your events and registrations.
+        </p>
+
+        <!-- Showing login messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="registration-error">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Organizer login form -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-field">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="submit-registration">
+                Login →
+            </button>
+        </form>
+
+        <p class="auth-footer">
+            Don't have an account?
+            <a href="{% url 'organizer_signup' %}">Become an Organizer</a>
+        </p>
+
+    </section>
+</main>
+
+{% endblock %}
